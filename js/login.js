@@ -1,4 +1,4 @@
-// Importar funciones de seguimiento del archivo de analytics
+// Importar funciones de seguimiento del archivo de analytics.js
 import { logLoginAttempt } from './analytics.js';
 
 document.addEventListener('DOMContentLoaded', function() {
