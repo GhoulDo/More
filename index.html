@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentos Especiales</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <h1>Nuestros Recuerdos</h1>
+            <p>Para continuar, ingresa las respuestas correctas</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="nickname1">¿Cómo te llamaba yo?</label>
+                    <input type="text" id="nickname1" name="nickname1" required>
+                </div>
+                <div class="input-group">
+                    <label for="nickname2">¿Cómo me llamabas tú?</label>
+                    <input type="text" id="nickname2" name="nickname2" required>
+                </div>
+                <button type="submit" class="btn-login">Entrar</button>
+                <p id="error-msg" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+    <script src="js/login.js"></script>
+</body>
+</html>

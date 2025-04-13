@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestras Últimas Palabras | Recuerdos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Montserrat:wght@300;400;500&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="fade-in-page">
+    <header>
+        <div class="header-content">
+            <h1>Nuestras Últimas Palabras</h1>
+            <nav>
+                <ul>
+                    <li><a href="home.html"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="recuerdos.html"><i class="fas fa-camera-retro"></i> Momentos</a></li>
+                    <li><a href="frases.html"><i class="fas fa-quote-left"></i> Palabras</a></li>
+                    <li><a href="carta.html"><i class="fas fa-envelope"></i> Carta</a></li>
+                    <li><a href="ultimas-palabras.html" class="active"><i class="fas fa-heartbeat"></i> Últimas Palabras</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="ultimas-palabras">
+        <div class="intro-text">
+            <h2>Lo Último que Nos Dijimos</h2>
+            <p>Algunas veces, las últimas palabras son las que más significan...</p>
+        </div>
+        
+        <!-- Contenedor de la animación del corazón -->
+        <div class="heart-animation-container">
+            <div class="heart-scene">
+                <!-- Animación principal del corazón -->
+                <div class="heart-animation">
+                    <div class="heart-overlay"></div>
+                    <div class="heart-crack"></div>
+                </div>
+                
+                <!-- Partículas que se dispersan -->
+                <div class="heart-particles" id="heart-particles"></div>
+                
+                <!-- Contenedor para las palabras que aparecen -->
+                <div class="last-words-container">
+                    <div class="last-word word-1">"La quiero"</div>
+                    <div class="last-word word-2">"La amo"</div>
+                    <div class="last-word word-3">"Yo igual"</div>
+                </div>
+                
+                <div class="final-message">
+                    Nuestras últimas palabras, nuestros últimos sentimientos...
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controles de la animación -->
+        <div class="animation-controls">
+            <button class="replay-button" id="replay-animation">
+                <i class="fas fa-redo-alt"></i> Volver a ver
+            </button>
+        </div>
+        
+        <div class="journey-timeline">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="quote special">
+                    <blockquote>
+                        "Necesito saber para poder llegar a algo"
+                    </blockquote>
+                    <cite>- 3 de Abril, 3:29 p.m.</cite>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="quote message-you">
+                    <blockquote>
+                        "Perdón si espera algo más de mí"
+                    </blockquote>
+                    <cite>- 3 de Abril, 3:38 p.m.</cite>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="quote">
+                    <blockquote>
+                        "Por qué se denigra, la quiero a usted, le he repetido 1000 veces"
+                    </blockquote>
+                    <cite>- 3 de Abril, 3:39 p.m.</cite>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="quote">
+                    <blockquote>
+                        "Gracias por cada momento, cada beso y cada caricia"
+                    </blockquote>
+                    <cite>- 3 de Abril, 3:46 p.m.</cite>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="quote message-you">
+                    <blockquote>
+                        "Gracias igual a usted"
+                    </blockquote>
+                    <cite>- 3 de Abril, 3:47 p.m.</cite>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="quote final-quote">
+                    <blockquote>
+                        "La quiero y la amo" <br>
+                        "Yo igual"
+                    </blockquote>
+                    <cite>- Nuestras últimas palabras, 3:47 p.m.</cite>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-quote">
+                <p>"Lo que fue real, siempre permanecerá"</p>
+            </div>
+            <div class="footer-credits">
+                <p>Creado con recuerdos y sentimientos sinceros</p>
+                <div class="heart-container">
+                    <i class="fas fa-heart broken-heart"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/heart-animation.js"></script>
+</body>
+</html>

@@ -1,0 +1,1258 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #f5f5f5;
+    background-color: #1a1a1a;
+}
+
+h1, h2, h3 {
+    font-family: 'Dancing Script', cursive;
+    color: #ff80bf;
+}
+
+/* Estilos de la página de login */
+.login-page {
+    background: linear-gradient(to bottom right, #2d0036, #0e0e0e);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: rgba(25, 25, 25, 0.9);
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(255, 128, 191, 0.2);
+    text-align: center;
+    border: 1px solid #ff80bf;
+}
+
+.login-box h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 128, 191, 0.5);
+}
+
+.login-box p {
+    margin-bottom: 30px;
+    color: #cccccc;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #ff80bf;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #444;
+    background-color: #2a2a2a;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #ff80bf;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 128, 191, 0.3);
+}
+
+.btn-login {
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.btn-login:hover {
+    background: linear-gradient(to right, #ff60a5, #8a3da6);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 128, 191, 0.4);
+}
+
+.error-message {
+    color: #ff80bf;
+    margin-top: 15px;
+    font-size: 14px;
+    display: none;
+}
+
+/* Animación para error */
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+/* Estilos del header y navegación */
+header {
+    background-color: #111;
+    box-shadow: 0 2px 10px rgba(255, 128, 191, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #333;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #ccc;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ff80bf;
+    text-shadow: 0 0 8px rgba(255, 128, 191, 0.5);
+}
+
+nav ul li a.active {
+    color: #ff80bf;
+    position: relative;
+}
+
+nav ul li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    box-shadow: 0 0 8px rgba(255, 128, 191, 0.5);
+}
+
+/* Nuevos estilos para los iconos en navegación */
+nav ul li a i {
+    margin-right: 5px;
+    font-size: 0.9rem;
+}
+
+/* Estilos del contenido principal */
+main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.intro-text {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.intro-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 128, 191, 0.3);
+}
+
+.intro-text p {
+    max-width: 700px;
+    margin: 0 auto;
+    color: #aaa;
+}
+
+/* Estilos de la página de inicio */
+.welcome-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #222;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    margin-bottom: 40px;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .welcome-section {
+        flex-direction: row;
+        align-items: stretch;
+    }
+}
+
+.welcome-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-frame {
+    width: 250px;
+    height: 300px;
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../img/placeholder1.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #333;
+    box-shadow: 0 0 20px rgba(255, 128, 191, 0.3);
+    position: relative;
+    border-radius: 5px;
+}
+
+.image-frame::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1px solid rgba(255, 128, 191, 0.5);
+    border-radius: 3px;
+}
+
+.welcome-text {
+    flex: 2;
+    position: relative;
+}
+
+.floating-quote {
+    margin-top: 20px;
+    padding: 15px;
+    border-left: 3px solid #ff80bf;
+    background-color: rgba(255, 128, 191, 0.1);
+    border-radius: 0 5px 5px 0;
+    position: relative;
+}
+
+.quote-icon {
+    color: #ff80bf;
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.welcome-section h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.welcome-section p {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    font-size: 18px;
+    color: #bbb;
+}
+
+.signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #ff80bf;
+    text-shadow: 0 0 8px rgba(255, 128, 191, 0.3);
+}
+
+.sections-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.preview-card {
+    background-color: #222;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    text-align: center;
+    border: 1px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.preview-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+}
+
+.preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 128, 191, 0.2);
+}
+
+.preview-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.preview-card p {
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.btn-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-link:hover {
+    background: linear-gradient(to right, #ff60a5, #8a3da6);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 128, 191, 0.3);
+}
+
+/* Icono de tarjetas */
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #ff80bf;
+    transition: transform 0.3s;
+}
+
+.preview-card:hover .card-icon {
+    transform: scale(1.2);
+}
+
+/* Caja de mensaje en home */
+.message-box {
+    margin-top: 50px;
+    padding: 25px;
+    border-radius: 10px;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.message-box h3 {
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
+
+.message-box h3 i {
+    color: #ff80bf;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+}
+
+.message-box p {
+    color: #bbb;
+    font-style: italic;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.message-date {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Estilos para la página de recuerdos */
+.memories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.memory-card {
+    background-color: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border: 1px solid #333;
+    transition: all 0.3s;
+}
+
+.memory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 128, 191, 0.2);
+}
+
+.memory-img {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+}
+
+.memory-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+}
+
+.memory-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.memory-card:hover .memory-img img {
+    transform: scale(1.05);
+}
+
+.memory-text {
+    padding: 20px;
+}
+
+.memory-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.memory-text p {
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.memory-text .date {
+    display: block;
+    font-size: 14px;
+    color: #777;
+}
+
+/* Estilos para la página de frases */
+.quotes-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quote {
+    background-color: #222;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+    border: 1px solid #333;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+}
+
+.quote:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 128, 191, 0.15);
+}
+
+.quote blockquote {
+    font-size: 1.3rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: #ddd;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.quote blockquote::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, #ff80bf, #9d50bb);
+    border-radius: 2px;
+}
+
+.quote cite {
+    display: block;
+    text-align: right;
+    color: #777;
+    font-size: 14px;
+}
+
+.quote.special {
+    background-color: #2a1a28;
+    border: 1px solid #ff80bf;
+}
+
+.quote.special blockquote {
+    color: #ff80bf;
+}
+
+.quote::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 3px;
+    background: #ff80bf;
+    border-radius: 2px;
+    transform: scaleY(0.3);
+    transition: transform 0.3s;
+}
+
+.quote:hover::before {
+    transform: scaleY(0.8);
+}
+
+.quote.message-you {
+    background-color: #1f1a22;
+}
+
+.quote.message-you blockquote {
+    color: #d4d4d4;
+}
+
+.final-quote {
+    text-align: center;
+    background-color: #1a1a1a;
+    border: 1px solid rgba(255, 128, 191, 0.3);
+}
+
+.final-quote blockquote {
+    font-size: 1.5rem;
+    color: #ff80bf;
+}
+
+.reflection-box {
+    margin-top: 50px;
+    padding: 30px;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+.reflection-box h3 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.reflection-box p {
+    color: #aaa;
+    margin-bottom: 15px;
+    line-height: 1.7;
+}
+
+/* Estilos para la página de proyectos */
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.project-card {
+    background-color: #222;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    transition: all 0.3s;
+    border: 1px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 128, 191, 0.2);
+}
+
+.project-card:hover::after {
+    transform: scaleX(1);
+}
+
+.project-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255, 128, 191, 0.3);
+}
+
+.project-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.project-card p {
+    color: #aaa;
+}
+
+/* Footer */
+footer {
+    background-color: #111;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #333;
+}
+
+footer p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Footer mejorado */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-quote p {
+    font-style: italic;
+    color: #aaa;
+}
+
+.heart-container {
+    margin-top: 10px;
+}
+
+.broken-heart {
+    color: #ff80bf;
+    font-size: 1.5rem;
+    animation: heartbeat 1.5s infinite;
+    opacity: 0.8;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    15% {
+        transform: scale(1.2);
+    }
+    30% {
+        transform: scale(1);
+    }
+    45% {
+        transform: scale(1.1);
+    }
+}
+
+/* Estilos para la página de carta */
+.carta-content {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.carta-container {
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    position: relative;
+    border: 1px solid #333;
+}
+
+.carta-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.carta-date {
+    color: #777;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.carta-body p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+    color: #bbb;
+}
+
+.carta-body p:first-of-type {
+    margin-top: 0;
+}
+
+.highlight-text {
+    color: #ff80bf;
+    font-style: italic;
+}
+
+.carta-final {
+    margin-top: 40px;
+}
+
+.firma {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #ff80bf;
+    margin-left: 20px;
+}
+
+.carta-postdata {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+
+/* Animaciones */
+.fade-element {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Estilos para la animación de entrada de la página */
+.fade-in-page {
+    animation: fadeInPage 1.2s ease-in-out;
+}
+
+@keyframes fadeInPage {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Media queries para responsive */
+@media (min-width: 768px) {
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    header h1 {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .sections-preview,
+    .memories-grid,
+    .projects-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .memory-img {
+        height: 180px;
+    }
+    
+    .login-box {
+        padding: 30px 15px;
+    }
+}
+
+/* ===== ANIMACIONES DEL CORAZÓN Y ÚLTIMAS PALABRAS ===== */
+/* Contenedor principal de la animación */
+.heart-animation-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    margin: 50px auto;
+    background-color: rgba(15, 15, 15, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    perspective: 1000px;
+}
+
+/* Escena que contiene todos los elementos animados */
+.heart-scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    perspective: 1000px;
+}
+
+/* Corazón principal animado */
+.heart-animation {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    animation: heartbeat-dramatic 5s infinite cubic-bezier(0.5, 0, 0.5, 1), 
+               heart-glow 5s infinite alternate;
+    transform-origin: center;
+    filter: drop-shadow(0 0 10px rgba(255, 128, 191, 0.7));
+    transform-style: preserve-3d;
+}
+
+/* Creación de la forma de corazón usando pseudoelementos */
+.heart-animation:before,
+.heart-animation:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ff80bf;
+    border-radius: 50%;
+}
+
+.heart-animation:before {
+    left: -50%;
+}
+
+.heart-animation:after {
+    top: -50%;
+}
+
+/* Capa superpuesta del corazón que da forma */
+.heart-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,128,191,0.8), rgba(157,80,187,0.8));
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    opacity: 0;
+    transform: scale(0);
+    animation: heart-reveal 5s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+}
+
+/* Grieta del corazón */
+.heart-crack {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 0;
+    background-color: #1a1a1a;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    animation: heart-crack 5s forwards cubic-bezier(0.34, 0.56, 0.64, 1) 2s;
+}
+
+/* Partículas que salen del corazón */
+.heart-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #ff80bf;
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 3;
+}
+
+/* Contenedor para las palabras animadas */
+.last-words-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+}
+
+.last-word {
+    font-family: 'Dancing Script', cursive;
+    color: white;
+    font-size: 0;
+    opacity: 0;
+    text-shadow: 0 0 15px rgba(255, 128, 191, 0.9);
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+/* Animaciones secuenciales para cada palabra */
+.word-1 {
+    animation: word-appear 2s forwards ease-out 1s;
+}
+
+.word-2 {
+    animation: word-appear 2s forwards ease-out 3s;
+}
+
+.word-3 {
+    animation: word-appear 2s forwards ease-out 5s;
+}
+
+/* Mensaje final de la animación */
+.final-message {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    animation: final-message 3s forwards ease-in-out 7s;
+    color: #ff80bf;
+    font-size: 1.2rem;
+}
+
+/* Controles de la animación */
+.animation-controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.replay-button {
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: button-appear 1s forwards ease-out 9s;
+}
+
+.replay-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 128, 191, 0.4);
+}
+
+.replay-button i {
+    font-size: 14px;
+}
+
+/* Keyframes para las animaciones del corazón */
+@keyframes heartbeat-dramatic {
+    0%, 100% {
+        transform: scale(1);
+    }
+    10% {
+        transform: scale(1.1);
+    }
+    20% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.15);
+    }
+    40% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    60% {
+        transform: scale(1);
+    }
+    70%, 90% {
+        transform: scale(1.1);
+    }
+    80% {
+        transform: scale(1);
+    }
+}
+
+@keyframes heart-glow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(255, 128, 191, 0.7));
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 128, 191, 0.9));
+    }
+    100% {
+        filter: drop-shadow(0 0 10px rgba(255, 128, 191, 0.7));
+    }
+}
+
+@keyframes heart-reveal {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(45deg);
+    }
+    20% {
+        opacity: 0.8;
+        transform: scale(1) rotate(45deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.05) rotate(45deg);
+    }
+}
+
+@keyframes heart-crack {
+    0% {
+        height: 0;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    20% {
+        height: 0;
+    }
+    40% {
+        height: 70%;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    60% {
+        height: 70%;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    80% {
+        height: 70%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+        height: 70%;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+@keyframes particle-move {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+@keyframes word-appear {
+    0% {
+        opacity: 0;
+        font-size: 0rem;
+        transform: translateY(20px);
+    }
+    20% {
+        opacity: 1;
+        font-size: 2.5rem;
+        transform: translateY(0);
+    }
+    80% {
+        opacity: 1;
+        font-size: 2.5rem;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0.7;
+        font-size: 2rem;
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes final-message {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes button-appear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos específicos para la página de últimas palabras */
+.ultimas-palabras {
+    margin: 40px auto;
+    max-width: 800px;
+}
+
+.ultimas-palabras .intro-text {
+    margin-bottom: 50px;
+}
+
+/* Línea de tiempo para la secuencia de mensajes */
+.journey-timeline {
+    position: relative;
+    padding: 40px 0;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: linear-gradient(to bottom, #ff80bf, #9d50bb);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.timeline-item.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    box-shadow: 0 0 10px rgba(255, 128, 191, 0.7);
+}
+
+/* Ajustes responsivos para la animación del corazón */
+@media (max-width: 768px) {
+    .heart-animation-container {
+        height: 350px;
+    }
+    
+    .heart-animation {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .last-word {
+        font-size: 0;
+    }
+    
+    @keyframes word-appear {
+        0% {
+            opacity: 0;
+            font-size: 0;
+            transform: translateY(20px);
+        }
+        20% {
+            opacity: 1;
+            font-size: 1.8rem;
+            transform: translateY(0);
+        }
+        80% {
+            opacity: 1;
+            font-size: 1.8rem;
+            transform: translateY(0);
+        }
+        100% {
+            opacity: 0.7;
+            font-size: 1.5rem;
+            transform: translateY(-10px);
+        }
+    }
+}
