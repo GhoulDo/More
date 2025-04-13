@@ -1,0 +1,415 @@
+/* Estilos específicos para la animación del corazón y últimas palabras */
+
+/* Contenedor principal de la animación */
+.heart-animation-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    margin: 50px auto;
+    background-color: rgba(15, 15, 15, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    perspective: 1000px;
+}
+
+/* Escena que contiene todos los elementos animados */
+.heart-scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    perspective: 1000px;
+}
+
+/* Corazón principal animado */
+.heart-animation {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    animation: heartbeat-dramatic 5s infinite cubic-bezier(0.5, 0, 0.5, 1), 
+               heart-glow 5s infinite alternate;
+    transform-origin: center;
+    filter: drop-shadow(0 0 10px rgba(255, 128, 191, 0.7));
+    transform-style: preserve-3d;
+}
+
+/* Creación de la forma de corazón usando pseudoelementos */
+.heart-animation:before,
+.heart-animation:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ff80bf;
+    border-radius: 50%;
+}
+
+.heart-animation:before {
+    left: -50%;
+}
+
+.heart-animation:after {
+    top: -50%;
+}
+
+/* Capa superpuesta del corazón que da forma */
+.heart-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,128,191,0.8), rgba(157,80,187,0.8));
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    opacity: 0;
+    transform: scale(0);
+    animation: heart-reveal 5s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+}
+
+/* Grieta del corazón */
+.heart-crack {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 0;
+    background-color: #1a1a1a;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    animation: heart-crack 5s forwards cubic-bezier(0.34, 0.56, 0.64, 1) 2s;
+}
+
+/* Partículas que salen del corazón */
+.heart-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #ff80bf;
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 3;
+}
+
+/* Contenedor para las palabras animadas */
+.last-words-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+}
+
+.last-word {
+    font-family: 'Dancing Script', cursive;
+    color: white;
+    font-size: 0;
+    opacity: 0;
+    text-shadow: 0 0 15px rgba(255, 128, 191, 0.9);
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+/* Animaciones secuenciales para cada palabra */
+.word-1 {
+    animation: word-appear 2s forwards ease-out 1s;
+}
+
+.word-2 {
+    animation: word-appear 2s forwards ease-out 3s;
+}
+
+.word-3 {
+    animation: word-appear 2s forwards ease-out 5s;
+}
+
+/* Mensaje final de la animación */
+.final-message {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    animation: final-message 3s forwards ease-in-out 7s;
+    color: #ff80bf;
+    font-size: 1.2rem;
+}
+
+/* Controles de la animación */
+.animation-controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.replay-button {
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: button-appear 1s forwards ease-out 9s;
+}
+
+.replay-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 128, 191, 0.4);
+}
+
+.replay-button i {
+    font-size: 14px;
+}
+
+/* Keyframes para las animaciones del corazón */
+@keyframes heartbeat-dramatic {
+    0%, 100% {
+        transform: scale(1);
+    }
+    10% {
+        transform: scale(1.1);
+    }
+    20% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.15);
+    }
+    40% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    60% {
+        transform: scale(1);
+    }
+    70%, 90% {
+        transform: scale(1.1);
+    }
+    80% {
+        transform: scale(1);
+    }
+}
+
+@keyframes heart-glow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(255, 128, 191, 0.7));
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 128, 191, 0.9));
+    }
+    100% {
+        filter: drop-shadow(0 0 10px rgba(255, 128, 191, 0.7));
+    }
+}
+
+@keyframes heart-reveal {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(45deg);
+    }
+    20% {
+        opacity: 0.8;
+        transform: scale(1) rotate(45deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.05) rotate(45deg);
+    }
+}
+
+@keyframes heart-crack {
+    0% {
+        height: 0;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    20% {
+        height: 0;
+    }
+    40% {
+        height: 70%;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    60% {
+        height: 70%;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    80% {
+        height: 70%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+        height: 70%;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+@keyframes particle-move {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+@keyframes word-appear {
+    0% {
+        opacity: 0;
+        font-size: 0rem;
+        transform: translateY(20px);
+    }
+    20% {
+        opacity: 1;
+        font-size: 2.5rem;
+        transform: translateY(0);
+    }
+    80% {
+        opacity: 1;
+        font-size: 2.5rem;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0.7;
+        font-size: 2rem;
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes final-message {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes button-appear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para la página de últimas palabras */
+.ultimas-palabras {
+    margin: 40px auto;
+    max-width: 800px;
+}
+
+.ultimas-palabras .intro-text {
+    margin-bottom: 50px;
+}
+
+/* Línea de tiempo para la secuencia de mensajes */
+.journey-timeline {
+    position: relative;
+    padding: 40px 0;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: linear-gradient(to bottom, #ff80bf, #9d50bb);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.timeline-item.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    box-shadow: 0 0 10px rgba(255, 128, 191, 0.7);
+}
+
+/* Ajustes responsivos para la animación del corazón */
+@media (max-width: 768px) {
+    .heart-animation-container {
+        height: 350px;
+    }
+    
+    .heart-animation {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .last-word {
+        font-size: 0;
+    }
+    
+    @keyframes word-appear {
+        0% {
+            opacity: 0;
+            font-size: 0;
+            transform: translateY(20px);
+        }
+        20% {
+            opacity: 1;
+            font-size: 1.8rem;
+            transform: translateY(0);
+        }
+        80% {
+            opacity: 1;
+            font-size: 1.8rem;
+            transform: translateY(0);
+        }
+        100% {
+            opacity: 0.7;
+            font-size: 1.5rem;
+            transform: translateY(-10px);
+        }
+    }
+}

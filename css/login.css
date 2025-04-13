@@ -1,0 +1,120 @@
+/* Estilos específicos para la página de login */
+
+.login-page {
+    background: linear-gradient(to bottom right, #2d0036, #0e0e0e);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: rgba(25, 25, 25, 0.9);
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(255, 128, 191, 0.2);
+    text-align: center;
+    border: 1px solid #ff80bf;
+}
+
+.login-box h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 128, 191, 0.5);
+}
+
+.login-box p {
+    margin-bottom: 30px;
+    color: #cccccc;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #ff80bf;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #444;
+    background-color: #2a2a2a;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #ff80bf;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 128, 191, 0.3);
+}
+
+.btn-login {
+    background: linear-gradient(to right, #ff80bf, #9d50bb);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.btn-login:hover {
+    background: linear-gradient(to right, #ff60a5, #8a3da6);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 128, 191, 0.4);
+}
+
+.error-message {
+    color: #ff80bf;
+    margin-top: 15px;
+    font-size: 14px;
+    display: none;
+}
+
+/* Animación para error */
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+/* Responsive para login */
+@media (max-width: 767px) {
+    .login-box {
+        padding: 30px 15px;
+    }
+}
