@@ -287,6 +287,129 @@
         .highlight {
             background-color: rgba(255, 255, 0, 0.15);
         }
+        
+        /* Nuevos estilos para mejorar la visualización de ubicación */
+        .location-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        .location-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .location-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+        
+        .location-error {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+        
+        .location-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .detail-item {
+            background-color: rgba(255, 128, 191, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .detail-item i {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .fingerprint-info {
+            border-top: 1px dashed #333;
+            margin-top: 10px;
+            padding-top: 8px;
+            font-size: 0.85em;
+            color: #888;
+        }
+        
+        .fingerprint-tag {
+            font-family: monospace;
+            background-color: #222;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .attempt-detail-panel {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #333;
+            display: none;
+        }
+        
+        .detail-tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+        
+        .detail-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .detail-tab:hover {
+            color: #ff80bf;
+        }
+        
+        .detail-tab.active {
+            color: #ff80bf;
+            border-bottom-color: #ff80bf;
+        }
+        
+        .detail-content {
+            display: none;
+        }
+        
+        .detail-content.active {
+            display: block;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            background-color: #222;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-table th, .stats-table td {
+                padding: 8px 10px;
+            }
+            
+            .detail-tab {
+                padding: 8px 10px;
+                font-size: 0.9em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -473,19 +596,22 @@
                                 <th>Resultado</th>
                                 <th>Ubicación</th>
                                 <th>Dispositivo</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
                 
                 loginAttempts.slice().reverse().forEach((attempt, index) => {
-                    const isPossiblyHer = attempt.nickname1.includes("m") || attempt.nickname2.includes("a");
-                    const rowClass = isPossiblyHer ? 
+                    const isProbablyHer = isProbablyTargetPerson(attempt);
+                    const rowClass = isProbablyHer ? 
                         `${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'} highlight` : 
                         `${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'}`;
                     
+                    const attemptId = `attempt-${index}`;
+                    
                     html += `
-                        <tr class="${rowClass}" data-attempt="${index}">
+                        <tr class="${rowClass}" data-attempt="${index}" id="${attemptId}-row">
                             <td>${formatDate(attempt.timestamp)}</td>
                             <td>${attempt.nickname1}</td>
                             <td>${attempt.nickname2}</td>
@@ -496,86 +622,59 @@
                             <td>
                     `;
                     
-                    if (attempt.location && attempt.location !== 'pendiente') {
-                        if (attempt.location.city) {
-                            html += `
-                                <button class="location-btn" onclick="toggleLocationData('login-${index}')">
-                                    <i class="fas fa-map-marker-alt"></i> 
-                                    ${attempt.location.city}, ${attempt.location.country}
-                                </button>
-                                <div id="login-${index}" class="location-data" style="display: none;">
-                                    <div class="ip-info">
-                                        <span><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</span>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-map-pin"></i> ${attempt.location.city}, ${attempt.location.region}, ${attempt.location.country}
-                                        ${attempt.location.latitude ? 
-                                            `<a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
-                                            target="_blank" class="maps-link">
-                                            <i class="fas fa-external-link-alt"></i> Ver en mapa</a>` 
-                                            : ''
-                                        }
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-building"></i> ISP: ${attempt.location.isp || 'No disponible'}
-                                    </div>
-                                </div>
-                            `;
-                        } else if (attempt.location.ip) {
-                            html += `
-                                <div class="ip-info">
-                                    <i class="fas fa-globe"></i> IP: ${attempt.location.ip || 'No disponible'}
-                                </div>
-                            `;
-                        } else if (attempt.location.latitude) {
-                            html += `
-                                <button class="location-btn" onclick="toggleLocationData('login-${index}')">
-                                    <i class="fas fa-map-marker-alt"></i> Ubicación GPS
-                                </button>
-                                <div id="login-${index}" class="location-data" style="display: none;">
-                                    <div>
-                                        <i class="fas fa-map-pin"></i> 
-                                        Lat: ${attempt.location.latitude.toFixed(6)}, 
-                                        Lng: ${attempt.location.longitude.toFixed(6)}
-                                        <a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
-                                        target="_blank" class="maps-link">
-                                        <i class="fas fa-external-link-alt"></i> Ver en mapa</a>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-crosshairs"></i> Precisión: ±${Math.round(attempt.location.accuracy)}m
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    } else {
-                        html += `<span>No disponible</span>`;
-                    }
+                    html += formatLocationCell(attempt, `loc-${index}`);
                     
                     html += `</td><td>`;
                     
-                    if (attempt.device) {
-                        const deviceType = detectDeviceType(attempt.device.userAgent);
-                        const icon = getDeviceIcon(deviceType);
-                        
-                        html += `
-                            <div>
-                                <i class="${icon}"></i> ${deviceType}
-                                <button class="expand-btn" onclick="toggleDeviceData('device-${index}')">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                            </div>
-                            <div id="device-${index}" class="device-info" style="display: none;">
-                                <div class="device-tag">${attempt.device.platform || 'Desconocido'}</div>
-                                <div class="device-tag">${attempt.device.screenSize}</div>
-                                <div class="device-tag">${attempt.device.timezone}</div>
-                                <div>${truncateUserAgent(attempt.device.userAgent)}</div>
-                            </div>
-                        `;
-                    } else {
-                        html += `<span>No disponible</span>`;
-                    }
+                    html += formatDeviceCell(attempt, `dev-${index}`);
                     
-                    html += `</td></tr>`;
+                    html += `</td><td>
+                                <button class="admin-btn" onclick="showDetailedView('${attemptId}')">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </td></tr>`;
+                    
+                    html += `
+                        <tr style="display: none;" id="${attemptId}-details">
+                            <td colspan="7">
+                                <div class="attempt-detail-panel" id="${attemptId}-panel">
+                                    <div class="detail-tabs">
+                                        <div class="detail-tab active" onclick="switchDetailTab('${attemptId}', 'overview')">Resumen</div>
+                                        <div class="detail-tab" onclick="switchDetailTab('${attemptId}', 'location')">Ubicación</div>
+                                        <div class="detail-tab" onclick="switchDetailTab('${attemptId}', 'device')">Dispositivo</div>
+                                        <div class="detail-tab" onclick="switchDetailTab('${attemptId}', 'raw')">Datos Brutos</div>
+                                    </div>
+                                    
+                                    <div id="${attemptId}-overview" class="detail-content active">
+                                        <h4>Resumen del Intento</h4>
+                                        <p>Realizado el ${formatDate(attempt.timestamp)}</p>
+                                        <div class="location-detail">
+                                            ${getQuickLocationSummary(attempt)}
+                                        </div>
+                                        <div class="fingerprint-info">
+                                            <p>Huella digital: <span class="fingerprint-tag">${attempt.fingerprint || 'No disponible'}</span></p>
+                                            <p>Probabilidad de ser la persona buscada: ${isProbablyHer ? '<span style="color: #ff80bf;">Alta</span>' : '<span style="color: #aaa;">Baja</span>'}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="${attemptId}-location" class="detail-content">
+                                        <h4>Información de Ubicación</h4>
+                                        ${getDetailedLocationInfo(attempt)}
+                                    </div>
+                                    
+                                    <div id="${attemptId}-device" class="detail-content">
+                                        <h4>Información del Dispositivo</h4>
+                                        ${getDetailedDeviceInfo(attempt)}
+                                    </div>
+                                    
+                                    <div id="${attemptId}-raw" class="detail-content">
+                                        <h4>Datos JSON</h4>
+                                        <pre style="overflow-x: auto; background: #111; padding: 10px; border-radius: 5px;">${JSON.stringify(attempt, null, 2)}</pre>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                 });
                 
                 html += `
@@ -586,10 +685,261 @@
                 container.innerHTML = html;
             }
             
+            function isProbablyTargetPerson(attempt) {
+                const nicknameMatch = (attempt.nickname1.toLowerCase().includes("mor") || 
+                                      attempt.nickname2.toLowerCase().includes("amo"));
+                
+                let deviceMatch = false;
+                if (attempt.device) {
+                    const deviceType = detectDeviceType(attempt.device.userAgent);
+                    deviceMatch = deviceType === "Android";
+                }
+                
+                const recentAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]')
+                    .filter(a => {
+                        if (attempt.fingerprint && a.fingerprint === attempt.fingerprint) return true;
+                        if (attempt.location && a.location && 
+                            attempt.location.ip && a.location.ip === attempt.location.ip) return true;
+                        return false;
+                    });
+                
+                const behaviorMatch = recentAttempts.length > 1;
+                
+                return nicknameMatch || (deviceMatch && behaviorMatch);
+            }
+            
+            function formatLocationCell(attempt, id) {
+                let html = '';
+                
+                if (!attempt.location || attempt.location === 'pendiente') {
+                    html += `
+                        <span class="location-status location-pending">
+                            <i class="fas fa-spinner fa-spin"></i> Pendiente
+                        </span>
+                    `;
+                } else if (attempt.location.error) {
+                    html += `
+                        <span class="location-status location-error">
+                            <i class="fas fa-exclamation-triangle"></i> Error
+                        </span>
+                    `;
+                } else {
+                    if (attempt.location.city) {
+                        html += `
+                            <button class="location-btn" onclick="toggleLocationData('${id}')">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                ${attempt.location.city}, ${attempt.location.country || ''}
+                            </button>
+                            <div id="${id}" class="location-data" style="display: none;">
+                                ${attempt.location.ip ? 
+                                  `<div class="ip-info"><span><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</span></div>` : ''}
+                                <div>
+                                    <i class="fas fa-map-pin"></i> 
+                                    ${attempt.location.city}, ${attempt.location.region || ''}, ${attempt.location.country || ''}
+                                    ${attempt.location.latitude ? 
+                                        `<a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
+                                        target="_blank" class="maps-link">
+                                        <i class="fas fa-external-link-alt"></i> Ver en mapa</a>` 
+                                        : ''}
+                                </div>
+                                ${attempt.location.isp ? 
+                                  `<div><i class="fas fa-building"></i> ISP: ${attempt.location.isp}</div>` : ''}
+                            </div>
+                        `;
+                    } else if (attempt.location.ip) {
+                        html += `
+                            <div class="ip-info">
+                                <i class="fas fa-globe"></i> IP: ${attempt.location.ip}
+                            </div>
+                        `;
+                    } else if (attempt.location.latitude) {
+                        html += `
+                            <button class="location-btn" onclick="toggleLocationData('${id}')">
+                                <i class="fas fa-map-marker-alt"></i> Ubicación GPS
+                            </button>
+                            <div id="${id}" class="location-data" style="display: none;">
+                                <div>
+                                    <i class="fas fa-map-pin"></i> 
+                                    Lat: ${attempt.location.latitude.toFixed(6)}, 
+                                    Lng: ${attempt.location.longitude.toFixed(6)}
+                                    <a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
+                                    target="_blank" class="maps-link">
+                                    <i class="fas fa-external-link-alt"></i> Ver en mapa</a>
+                                </div>
+                                ${attempt.location.accuracy ? 
+                                  `<div><i class="fas fa-crosshairs"></i> Precisión: ±${Math.round(attempt.location.accuracy)}m</div>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        html += `<span>Información limitada</span>`;
+                    }
+                }
+                
+                return html;
+            }
+            
+            function formatDeviceCell(attempt, id) {
+                let html = '';
+                
+                if (attempt.device) {
+                    const deviceType = detectDeviceType(attempt.device.userAgent);
+                    const icon = getDeviceIcon(deviceType);
+                    
+                    html += `
+                        <div>
+                            <i class="${icon}"></i> ${deviceType}
+                            <button class="expand-btn" onclick="toggleDeviceData('${id}')">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div id="${id}" class="device-info" style="display: none;">
+                            ${attempt.device.platform ? `<div class="device-tag">${attempt.device.platform}</div>` : ''}
+                            ${attempt.device.screenSize ? `<div class="device-tag">${attempt.device.screenSize}</div>` : ''}
+                            ${attempt.device.timezone ? `<div class="device-tag">${attempt.device.timezone}</div>` : ''}
+                            ${attempt.device.userAgent ? `<div>${truncateUserAgent(attempt.device.userAgent)}</div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    html += `<span>No disponible</span>`;
+                }
+                
+                return html;
+            }
+            
+            function getQuickLocationSummary(attempt) {
+                if (!attempt.location || attempt.location === 'pendiente') {
+                    return `<div class="detail-item"><i class="fas fa-map-marker-alt"></i> Ubicación no disponible</div>`;
+                }
+                
+                let summary = '';
+                
+                if (attempt.location.city) {
+                    summary += `<div class="detail-item"><i class="fas fa-city"></i> ${attempt.location.city}, ${attempt.location.country || ''}</div>`;
+                }
+                
+                if (attempt.location.ip) {
+                    summary += `<div class="detail-item"><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</div>`;
+                }
+                
+                if (attempt.device) {
+                    const deviceType = detectDeviceType(attempt.device.userAgent);
+                    summary += `<div class="detail-item"><i class="${getDeviceIcon(deviceType)}"></i> ${deviceType}</div>`;
+                }
+                
+                return summary || `<div class="detail-item"><i class="fas fa-question-circle"></i> Información limitada</div>`;
+            }
+            
+            function getDetailedLocationInfo(attempt) {
+                if (!attempt.location || attempt.location === 'pendiente') {
+                    return `<p>No hay información de ubicación disponible.</p>`;
+                }
+                
+                if (attempt.location.error) {
+                    return `<p>Error al obtener ubicación: ${attempt.location.error}</p>`;
+                }
+                
+                let html = '<div class="location-detail">';
+                
+                if (attempt.location.ip) {
+                    html += `
+                        <div class="detail-item"><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</div>
+                    `;
+                    
+                    if (attempt.location.city) {
+                        html += `
+                            <div class="detail-item"><i class="fas fa-city"></i> Ciudad: ${attempt.location.city}</div>
+                            <div class="detail-item"><i class="fas fa-map"></i> Región: ${attempt.location.region || 'N/A'}</div>
+                            <div class="detail-item"><i class="fas fa-flag"></i> País: ${attempt.location.country || 'N/A'}</div>
+                        `;
+                    }
+                    
+                    if (attempt.location.isp) {
+                        html += `<div class="detail-item"><i class="fas fa-building"></i> ISP: ${attempt.location.isp}</div>`;
+                    }
+                }
+                
+                if (attempt.location.latitude) {
+                    html += `
+                        <div class="detail-item"><i class="fas fa-map-pin"></i> Coordenadas: ${attempt.location.latitude.toFixed(6)}, ${attempt.location.longitude.toFixed(6)}</div>
+                    `;
+                    
+                    if (attempt.location.accuracy) {
+                        html += `<div class="detail-item"><i class="fas fa-crosshairs"></i> Precisión: ±${Math.round(attempt.location.accuracy)}m</div>`;
+                    }
+                    
+                    html += `
+                        <div class="map-container">
+                            <a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
+                               target="_blank" class="btn-link">
+                               <i class="fas fa-map"></i> Ver en Google Maps
+                            </a>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+                
+                return html;
+            }
+            
+            function getDetailedDeviceInfo(attempt) {
+                if (!attempt.device) {
+                    return `<p>No hay información del dispositivo disponible.</p>`;
+                }
+                
+                const deviceType = detectDeviceType(attempt.device.userAgent);
+                
+                let html = `
+                    <div class="device-info">
+                        <h5><i class="${getDeviceIcon(deviceType)}"></i> ${deviceType}</h5>
+                        <div class="location-detail">
+                `;
+                
+                if (attempt.device.platform) {
+                    html += `<div class="detail-item"><i class="fas fa-laptop"></i> Sistema: ${attempt.device.platform}</div>`;
+                }
+                
+                if (attempt.device.screenSize) {
+                    html += `<div class="detail-item"><i class="fas fa-desktop"></i> Pantalla: ${attempt.device.screenSize}</div>`;
+                }
+                
+                if (attempt.device.windowSize) {
+                    html += `<div class="detail-item"><i class="fas fa-window-restore"></i> Ventana: ${attempt.device.windowSize}</div>`;
+                }
+                
+                if (attempt.device.timezone) {
+                    html += `<div class="detail-item"><i class="fas fa-clock"></i> Zona horaria: ${attempt.device.timezone}</div>`;
+                }
+                
+                if (attempt.device.language) {
+                    html += `<div class="detail-item"><i class="fas fa-language"></i> Idioma: ${attempt.device.language}</div>`;
+                }
+                
+                html += `
+                        </div>
+                        <div class="fingerprint-info">
+                            ${attempt.fingerprint ? `<p>Huella digital: <span class="fingerprint-tag">${attempt.fingerprint}</span></p>` : ''}
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <h5>User Agent</h5>
+                            <div style="background-color: #111; padding: 10px; border-radius: 5px; overflow-x: auto; margin-top: 5px; font-family: monospace; font-size: 0.85em;">
+                                ${attempt.device.userAgent || 'No disponible'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                return html;
+            }
+            
             function detectDeviceType(userAgent) {
+                if (!userAgent) return "Desconocido";
+                
                 const ua = userAgent.toLowerCase();
-                if (ua.includes("iphone") || ua.includes("ipod") || ua.includes("ipad")) return "iOS";
-                if (ua.includes("android")) return "Android";
+                if (ua.includes("iphone") || ua.includes("ipod")) return "iPhone";
+                if (ua.includes("ipad")) return "iPad";
+                if (ua.includes("android") && ua.includes("mobile")) return "Android Phone";
+                if (ua.includes("android") && !ua.includes("mobile")) return "Android Tablet";
                 if (ua.includes("windows phone")) return "Windows Phone";
                 if (ua.includes("macintosh") || ua.includes("mac os")) return "Mac";
                 if (ua.includes("windows")) return "Windows";
@@ -597,247 +947,34 @@
                 return "Desconocido";
             }
             
-            function getDeviceIcon(deviceType) {
-                switch (deviceType) {
-                    case "iOS": return "fab fa-apple";
-                    case "Android": return "fab fa-android";
-                    case "Windows Phone": return "fab fa-windows";
-                    case "Mac": return "fab fa-apple";
-                    case "Windows": return "fab fa-windows";
-                    case "Linux": return "fab fa-linux";
-                    default: return "fas fa-desktop";
-                }
-            }
-            
-            function truncateUserAgent(ua) {
-                return ua.length > 70 ? ua.substring(0, 70) + '...' : ua;
-            }
-            
-            function loadPageVisits() {
-                const container = document.getElementById('pageVisitsContainer');
-                const pageVisits = JSON.parse(localStorage.getItem('pageVisits') || '{}');
+            window.showDetailedView = function(attemptId) {
+                const detailsRow = document.getElementById(`${attemptId}-details`);
+                const detailsPanel = document.getElementById(`${attemptId}-panel`);
                 
-                let totalVisits = 0;
-                Object.values(pageVisits).forEach(visits => {
-                    totalVisits += visits.length;
-                });
-                
-                document.getElementById('pageVisitsCount').textContent = totalVisits;
-                
-                if (totalVisits === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-ghost"></i>
-                            <p>No se han registrado visitas a las páginas.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = '';
-                
-                html += `
-                    <div class="counter-grid">
-                `;
-                
-                Object.keys(pageVisits).forEach(page => {
-                    const visitCount = pageVisits[page].length;
-                    const icon = getPageIcon(page);
-                    
-                    html += `
-                        <div class="counter-box">
-                            <div class="counter-label">
-                                <i class="${icon}"></i> ${getPageName(page)}
-                            </div>
-                            <div class="counter-value">${visitCount}</div>
-                        </div>
-                    `;
-                });
-                
-                html += `
-                    </div>
-                    <h4>Historial de visitas recientes</h4>
-                    <table class="stats-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Página</th>
-                                <th>Referencia</th>
-                                <th>Tiempo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                let allVisits = [];
-                Object.keys(pageVisits).forEach(page => {
-                    pageVisits[page].forEach(visit => {
-                        allVisits.push({
-                            page: page,
-                            ...visit
-                        });
+                if (detailsRow.style.display === 'none') {
+                    document.querySelectorAll('[id$="-details"]').forEach(row => {
+                        if (row.id !== `${attemptId}-details`) row.style.display = 'none';
                     });
-                });
-                
-                allVisits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                allVisits.slice(0, 20).forEach(visit => {
-                    html += `
-                        <tr>
-                            <td>${formatDate(visit.timestamp)}</td>
-                            <td><i class="${getPageIcon(visit.page)}"></i> ${getPageName(visit.page)}</td>
-                            <td>${visit.referrer || 'Directa'}</td>
-                            <td><span class="time-ago">${timeAgo(visit.timestamp)}</span></td>
-                        </tr>
-                    `;
-                });
-                
-                html += `
-                        </tbody>
-                    </table>
-                `;
-                
-                container.innerHTML = html;
-            }
-            
-            function loadHeartInteractions() {
-                const container = document.getElementById('heartInteractionsContainer');
-                const heartInteractions = JSON.parse(localStorage.getItem('heartInteractions') || '[]');
-                
-                document.getElementById('heartInteractionsCount').textContent = heartInteractions.length;
-                
-                if (heartInteractions.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-ghost"></i>
-                            <p>No se han registrado interacciones con la animación del corazón.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = `
-                    <table class="stats-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Acción</th>
-                                <th>ID de Sesión</th>
-                                <th>Tiempo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                heartInteractions.slice().reverse().forEach(interaction => {
-                    html += `
-                        <tr>
-                            <td>${formatDate(interaction.timestamp)}</td>
-                            <td>
-                                <i class="fas ${interaction.action === 'replay animation' ? 'fa-redo-alt' : 'fa-eye'}"></i> 
-                                ${interaction.action}
-                            </td>
-                            <td>${interaction.sessionId}</td>
-                            <td><span class="time-ago">${timeAgo(interaction.timestamp)}</span></td>
-                        </tr>
-                    `;
-                });
-                
-                html += `
-                        </tbody>
-                    </table>
-                `;
-                
-                container.innerHTML = html;
-            }
-            
-            function getPageIcon(page) {
-                const icons = {
-                    'index.html': 'fas fa-sign-in-alt',
-                    'home.html': 'fas fa-home',
-                    'recuerdos.html': 'fas fa-camera-retro',
-                    'frases.html': 'fas fa-quote-left',
-                    'proyectos.html': 'fas fa-project-diagram',
-                    'carta.html': 'fas fa-envelope',
-                    'ultimas-palabras.html': 'fas fa-heartbeat',
-                    'admin.html': 'fas fa-shield-alt'
-                };
-                
-                return icons[page] || 'fas fa-file';
-            }
-            
-            function getPageName(page) {
-                const names = {
-                    'index.html': 'Login',
-                    'home.html': 'Inicio',
-                    'recuerdos.html': 'Recuerdos',
-                    'frases.html': 'Frases',
-                    'proyectos.html': 'Proyectos',
-                    'carta.html': 'Carta',
-                    'ultimas-palabras.html': 'Últimas Palabras',
-                    'admin.html': 'Administración'
-                };
-                
-                return names[page] || page;
-            }
-            
-            function loadAllStats() {
-                loadLoginAttempts();
-                loadPageVisits();
-                loadHeartInteractions();
-                
-                document.getElementById('lastUpdated').textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
-            }
-            
-            document.getElementById('refreshStats').addEventListener('click', loadAllStats);
-            
-            document.getElementById('exportStats').addEventListener('click', function() {
-                const data = {
-                    loginAttempts: JSON.parse(localStorage.getItem('loginAttempts') || '[]'),
-                    pageVisits: JSON.parse(localStorage.getItem('pageVisits') || '{}'),
-                    heartInteractions: JSON.parse(localStorage.getItem('heartInteractions') || '[]'),
-                    exportDate: new Date().toISOString()
-                };
-                
-                const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.download = 'estadisticas-visitas-' + new Date().toISOString().split('T')[0] + '.json';
-                a.href = url;
-                a.click();
-                
-                URL.revokeObjectURL(url);
-            });
-            
-            document.getElementById('clearStats').addEventListener('click', function() {
-                if (confirm('¿Estás seguro de que deseas borrar todas las estadísticas? Esta acción no se puede deshacer.')) {
-                    localStorage.removeItem('loginAttempts');
-                    localStorage.removeItem('pageVisits');
-                    localStorage.removeItem('heartInteractions');
-                    loadAllStats();
-                    alert('Estadísticas borradas correctamente');
-                }
-            });
-
-            window.toggleLocationData = function(id) {
-                const element = document.getElementById(id);
-                if (element.style.display === 'none') {
-                    element.style.display = 'block';
+                    
+                    detailsRow.style.display = '';
+                    detailsPanel.style.display = 'block';
                 } else {
-                    element.style.display = 'none';
+                    detailsRow.style.display = 'none';
                 }
             };
             
-            window.toggleDeviceData = function(id) {
-                const element = document.getElementById(id);
-                if (element.style.display === 'none') {
-                    element.style.display = 'block';
-                    element.previousElementSibling.querySelector('.expand-btn i').className = 'fas fa-chevron-up';
-                } else {
-                    element.style.display = 'none';
-                    element.previousElementSibling.querySelector('.expand-btn i').className = 'fas fa-chevron-down';
-                }
+            window.switchDetailTab = function(attemptId, tab) {
+                document.querySelectorAll(`#${attemptId}-panel .detail-tab`).forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                document.querySelectorAll(`#${attemptId}-panel .detail-content`).forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                document.querySelector(`.detail-tab[onclick="switchDetailTab('${attemptId}', '${tab}')"]`).classList.add('active');
+                
+                document.getElementById(`${attemptId}-${tab}`).classList.add('active');
             };
         });
     </script>
