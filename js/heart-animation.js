@@ -8,20 +8,109 @@ document.addEventListener('DOMContentLoaded', function() {
         // Obtener registros existentes o inicializar un array vacío
         let heartInteractions = JSON.parse(localStorage.getItem('heartInteractions') || '[]');
         
-        // Añadir nueva interacción con timestamp
-        heartInteractions.push({
+        // Recopilar datos del dispositivo
+        const deviceData = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            vendor: navigator.vendor,
+            screenSize: `${window.screen.width}x${window.screen.height}`,
+            windowSize: `${window.innerWidth}x${window.innerHeight}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezoneOffset: new Date().getTimezoneOffset(),
+            colorDepth: window.screen.colorDepth,
+            devicePixelRatio: window.devicePixelRatio || 1,
+            cookiesEnabled: navigator.cookieEnabled
+        };
+        
+        // Crear el objeto de interacción base
+        const interaction = {
             timestamp: new Date().toISOString(),
             action: action,
-            sessionId: sessionStorage.getItem('loginTime') || 'desconocido'
-        });
+            sessionId: sessionStorage.getItem('loginTime') || 'desconocido',
+            device: deviceData,
+            location: 'pendiente'
+        };
+        
+        // Añadir la interacción a la lista
+        heartInteractions.push(interaction);
         
         // Limitar el número de registros (mantener solo los últimos 50)
         if (heartInteractions.length > 50) {
             heartInteractions = heartInteractions.slice(-50);
         }
         
-        // Guardar de vuelta en localStorage
+        // Guardar en localStorage
         localStorage.setItem('heartInteractions', JSON.stringify(heartInteractions));
+        
+        // Intentar obtener la ubicación
+        try {
+            // Primero intentamos obtener datos de IP usando una API pública
+            fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                // Actualizamos el registro con la información de ubicación
+                const lastIndex = heartInteractions.length - 1;
+                heartInteractions[lastIndex].location = {
+                    ip: data.ip,
+                    city: data.city,
+                    region: data.region,
+                    country: data.country_name,
+                    postal: data.postal,
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    isp: data.org,
+                    source: 'ipapi.co'
+                };
+                
+                // Guardamos la actualización
+                localStorage.setItem('heartInteractions', JSON.stringify(heartInteractions));
+            })
+            .catch(err => {
+                // Si falla, intentamos con otra API alternativa
+                fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const lastIndex = heartInteractions.length - 1;
+                    heartInteractions[lastIndex].location = {
+                        ip: data.ip,
+                        source: 'ipify.org'
+                    };
+                    localStorage.setItem('heartInteractions', JSON.stringify(heartInteractions));
+                })
+                .catch(err => console.log('No se pudo obtener IP'));
+            });
+            
+            // También intentamos obtener la geolocalización del navegador
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lastIndex = heartInteractions.length - 1;
+                        const preciseLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy,
+                            source: 'browser-geolocation'
+                        };
+                        
+                        // Si ya teníamos datos de IP, los conservamos y añadimos estos
+                        if (heartInteractions[lastIndex].location !== 'pendiente') {
+                            heartInteractions[lastIndex].preciseLocation = preciseLocation;
+                        } else {
+                            heartInteractions[lastIndex].location = preciseLocation;
+                        }
+                        
+                        localStorage.setItem('heartInteractions', JSON.stringify(heartInteractions));
+                    },
+                    function(error) {
+                        console.log("Geolocalización denegada o no disponible.");
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            }
+        } catch (error) {
+            console.log("Error al obtener ubicación:", error);
+        }
     }
     
     // Función para crear partículas
@@ -85,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Volver a crear partículas
         createParticles();
         
-        // Registrar la interacción
+        // Registrar la interacción con datos de ubicación
         logHeartInteraction('replay animation');
         
         // Actualizar la referencia del contenedor de partículas

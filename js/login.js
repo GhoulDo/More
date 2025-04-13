@@ -11,16 +11,33 @@ document.addEventListener('DOMContentLoaded', function() {
         // Obtener registros existentes o inicializar un array vacío
         let loginAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]');
         
-        // Añadir nuevo intento con timestamp
-        loginAttempts.push({
+        // Recopilar información del dispositivo
+        const deviceData = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            vendor: navigator.vendor,
+            screenSize: `${window.screen.width}x${window.screen.height}`,
+            windowSize: `${window.innerWidth}x${window.innerHeight}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezoneOffset: new Date().getTimezoneOffset(),
+            colorDepth: window.screen.colorDepth,
+            devicePixelRatio: window.devicePixelRatio || 1,
+            cookiesEnabled: navigator.cookieEnabled
+        };
+        
+        // Crear el registro base del intento
+        const loginAttempt = {
             timestamp: new Date().toISOString(),
             nickname1: nickname1,
             nickname2: nickname2,
             success: success,
-            ip: 'No disponible', // No es posible obtener IP con JavaScript puro
-            userAgent: navigator.userAgent,
-            screenSize: `${window.screen.width}x${window.screen.height}`
-        });
+            device: deviceData,
+            location: 'pendiente'
+        };
+        
+        // Añadir el intento a la lista
+        loginAttempts.push(loginAttempt);
         
         // Limitar el número de registros (mantener solo los últimos 100)
         if (loginAttempts.length > 100) {
@@ -29,6 +46,75 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Guardar de vuelta en localStorage
         localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+        
+        // Intentar obtener información de ubicación
+        try {
+            // Obtener datos de IP usando una API pública
+            fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                // Actualizamos el registro con la información de ubicación
+                const lastIndex = loginAttempts.length - 1;
+                loginAttempts[lastIndex].location = {
+                    ip: data.ip,
+                    city: data.city,
+                    region: data.region,
+                    country: data.country_name,
+                    postal: data.postal,
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    isp: data.org,
+                    source: 'ipapi.co'
+                };
+                
+                // Guardamos la actualización
+                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+            })
+            .catch(err => {
+                // Si falla, intentamos con otra API alternativa
+                fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const lastIndex = loginAttempts.length - 1;
+                    loginAttempts[lastIndex].location = {
+                        ip: data.ip,
+                        source: 'ipify.org'
+                    };
+                    localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+                })
+                .catch(err => console.log('No se pudo obtener IP'));
+            });
+            
+            // Intentamos obtener la geolocalización del navegador para casos de éxito
+            if (success && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lastIndex = loginAttempts.length - 1;
+                        const preciseLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy,
+                            source: 'browser-geolocation'
+                        };
+                        
+                        // Si ya teníamos datos de IP, los conservamos y añadimos estos
+                        if (loginAttempts[lastIndex].location !== 'pendiente') {
+                            loginAttempts[lastIndex].preciseLocation = preciseLocation;
+                        } else {
+                            loginAttempts[lastIndex].location = preciseLocation;
+                        }
+                        
+                        localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+                    },
+                    function(error) {
+                        console.log("Geolocalización denegada.");
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            }
+        } catch (error) {
+            console.log("Error al obtener ubicación:", error);
+        }
     }
     
     loginForm.addEventListener('submit', function(event) {

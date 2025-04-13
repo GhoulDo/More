@@ -212,6 +212,81 @@
             border-color: #ff80bf;
             box-shadow: 0 0 10px rgba(255, 128, 191, 0.3);
         }
+
+        .location-data {
+            background-color: rgba(255, 128, 191, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        
+        .location-btn {
+            background: none;
+            border: none;
+            color: #ff80bf;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .location-btn:hover {
+            background: rgba(255, 128, 191, 0.1);
+        }
+        
+        .maps-link {
+            color: #9d50bb;
+            margin-left: 5px;
+            text-decoration: none;
+        }
+        
+        .maps-link:hover {
+            text-decoration: underline;
+        }
+        
+        .device-info {
+            margin-top: 5px;
+            color: #777;
+            font-size: 0.85em;
+        }
+        
+        .device-tag {
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 3px;
+            background-color: #222;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 0.8em;
+        }
+        
+        .ip-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s;
+        }
+        
+        .expand-btn:hover {
+            color: #ff80bf;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 255, 0, 0.15);
+        }
     </style>
 </head>
 <body>
@@ -317,7 +392,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Verificar contraseña de administrador
             const passwordContainer = document.getElementById('passwordContainer');
             const adminPassword = document.getElementById('adminPassword');
             const submitPassword = document.getElementById('submitPassword');
@@ -344,13 +418,11 @@
                 }
             });
             
-            // Función para formatear fecha
             function formatDate(dateString) {
                 const date = new Date(dateString);
                 return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
             }
             
-            // Función para calcular tiempo transcurrido
             function timeAgo(dateString) {
                 const date = new Date(dateString);
                 const now = new Date();
@@ -374,7 +446,6 @@
                 return "justo ahora";
             }
             
-            // Cargar intentos de login
             function loadLoginAttempts() {
                 const container = document.getElementById('loginAttemptsContainer');
                 const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]');
@@ -400,16 +471,21 @@
                                 <th>Primer Apodo</th>
                                 <th>Segundo Apodo</th>
                                 <th>Resultado</th>
-                                <th>Tiempo</th>
+                                <th>Ubicación</th>
+                                <th>Dispositivo</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
                 
-                // Mostrar los intentos más recientes primero
-                loginAttempts.slice().reverse().forEach(attempt => {
+                loginAttempts.slice().reverse().forEach((attempt, index) => {
+                    const isPossiblyHer = attempt.nickname1.includes("m") || attempt.nickname2.includes("a");
+                    const rowClass = isPossiblyHer ? 
+                        `${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'} highlight` : 
+                        `${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'}`;
+                    
                     html += `
-                        <tr class="${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'}">
+                        <tr class="${rowClass}" data-attempt="${index}">
                             <td>${formatDate(attempt.timestamp)}</td>
                             <td>${attempt.nickname1}</td>
                             <td>${attempt.nickname2}</td>
@@ -417,9 +493,89 @@
                                 <i class="fas ${attempt.success ? 'fa-check-circle' : 'fa-times-circle'}"></i>
                                 ${attempt.success ? 'Exitoso' : 'Fallido'}
                             </td>
-                            <td><span class="time-ago">${timeAgo(attempt.timestamp)}</span></td>
-                        </tr>
+                            <td>
                     `;
+                    
+                    if (attempt.location && attempt.location !== 'pendiente') {
+                        if (attempt.location.city) {
+                            html += `
+                                <button class="location-btn" onclick="toggleLocationData('login-${index}')">
+                                    <i class="fas fa-map-marker-alt"></i> 
+                                    ${attempt.location.city}, ${attempt.location.country}
+                                </button>
+                                <div id="login-${index}" class="location-data" style="display: none;">
+                                    <div class="ip-info">
+                                        <span><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-map-pin"></i> ${attempt.location.city}, ${attempt.location.region}, ${attempt.location.country}
+                                        ${attempt.location.latitude ? 
+                                            `<a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
+                                            target="_blank" class="maps-link">
+                                            <i class="fas fa-external-link-alt"></i> Ver en mapa</a>` 
+                                            : ''
+                                        }
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-building"></i> ISP: ${attempt.location.isp || 'No disponible'}
+                                    </div>
+                                </div>
+                            `;
+                        } else if (attempt.location.ip) {
+                            html += `
+                                <div class="ip-info">
+                                    <i class="fas fa-globe"></i> IP: ${attempt.location.ip || 'No disponible'}
+                                </div>
+                            `;
+                        } else if (attempt.location.latitude) {
+                            html += `
+                                <button class="location-btn" onclick="toggleLocationData('login-${index}')">
+                                    <i class="fas fa-map-marker-alt"></i> Ubicación GPS
+                                </button>
+                                <div id="login-${index}" class="location-data" style="display: none;">
+                                    <div>
+                                        <i class="fas fa-map-pin"></i> 
+                                        Lat: ${attempt.location.latitude.toFixed(6)}, 
+                                        Lng: ${attempt.location.longitude.toFixed(6)}
+                                        <a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
+                                        target="_blank" class="maps-link">
+                                        <i class="fas fa-external-link-alt"></i> Ver en mapa</a>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-crosshairs"></i> Precisión: ±${Math.round(attempt.location.accuracy)}m
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        html += `<span>No disponible</span>`;
+                    }
+                    
+                    html += `</td><td>`;
+                    
+                    if (attempt.device) {
+                        const deviceType = detectDeviceType(attempt.device.userAgent);
+                        const icon = getDeviceIcon(deviceType);
+                        
+                        html += `
+                            <div>
+                                <i class="${icon}"></i> ${deviceType}
+                                <button class="expand-btn" onclick="toggleDeviceData('device-${index}')">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="device-${index}" class="device-info" style="display: none;">
+                                <div class="device-tag">${attempt.device.platform || 'Desconocido'}</div>
+                                <div class="device-tag">${attempt.device.screenSize}</div>
+                                <div class="device-tag">${attempt.device.timezone}</div>
+                                <div>${truncateUserAgent(attempt.device.userAgent)}</div>
+                            </div>
+                        `;
+                    } else {
+                        html += `<span>No disponible</span>`;
+                    }
+                    
+                    html += `</td></tr>`;
                 });
                 
                 html += `
@@ -430,7 +586,33 @@
                 container.innerHTML = html;
             }
             
-            // Cargar visitas por página
+            function detectDeviceType(userAgent) {
+                const ua = userAgent.toLowerCase();
+                if (ua.includes("iphone") || ua.includes("ipod") || ua.includes("ipad")) return "iOS";
+                if (ua.includes("android")) return "Android";
+                if (ua.includes("windows phone")) return "Windows Phone";
+                if (ua.includes("macintosh") || ua.includes("mac os")) return "Mac";
+                if (ua.includes("windows")) return "Windows";
+                if (ua.includes("linux")) return "Linux";
+                return "Desconocido";
+            }
+            
+            function getDeviceIcon(deviceType) {
+                switch (deviceType) {
+                    case "iOS": return "fab fa-apple";
+                    case "Android": return "fab fa-android";
+                    case "Windows Phone": return "fab fa-windows";
+                    case "Mac": return "fab fa-apple";
+                    case "Windows": return "fab fa-windows";
+                    case "Linux": return "fab fa-linux";
+                    default: return "fas fa-desktop";
+                }
+            }
+            
+            function truncateUserAgent(ua) {
+                return ua.length > 70 ? ua.substring(0, 70) + '...' : ua;
+            }
+            
             function loadPageVisits() {
                 const container = document.getElementById('pageVisitsContainer');
                 const pageVisits = JSON.parse(localStorage.getItem('pageVisits') || '{}');
@@ -454,7 +636,6 @@
                 
                 let html = '';
                 
-                // Primero un resumen por página
                 html += `
                     <div class="counter-grid">
                 `;
@@ -488,7 +669,6 @@
                         <tbody>
                 `;
                 
-                // Crear un array plano con todas las visitas
                 let allVisits = [];
                 Object.keys(pageVisits).forEach(page => {
                     pageVisits[page].forEach(visit => {
@@ -499,10 +679,8 @@
                     });
                 });
                 
-                // Ordenar por fecha, más reciente primero
                 allVisits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
-                // Mostrar las 20 visitas más recientes
                 allVisits.slice(0, 20).forEach(visit => {
                     html += `
                         <tr>
@@ -522,7 +700,6 @@
                 container.innerHTML = html;
             }
             
-            // Cargar interacciones con el corazón
             function loadHeartInteractions() {
                 const container = document.getElementById('heartInteractionsContainer');
                 const heartInteractions = JSON.parse(localStorage.getItem('heartInteractions') || '[]');
@@ -552,7 +729,6 @@
                         <tbody>
                 `;
                 
-                // Mostrar las interacciones más recientes primero
                 heartInteractions.slice().reverse().forEach(interaction => {
                     html += `
                         <tr>
@@ -575,7 +751,6 @@
                 container.innerHTML = html;
             }
             
-            // Funciones auxiliares
             function getPageIcon(page) {
                 const icons = {
                     'index.html': 'fas fa-sign-in-alt',
@@ -606,7 +781,6 @@
                 return names[page] || page;
             }
             
-            // Cargar todas las estadísticas
             function loadAllStats() {
                 loadLoginAttempts();
                 loadPageVisits();
@@ -615,7 +789,6 @@
                 document.getElementById('lastUpdated').textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
             }
             
-            // Event listeners para los botones
             document.getElementById('refreshStats').addEventListener('click', loadAllStats);
             
             document.getElementById('exportStats').addEventListener('click', function() {
@@ -646,6 +819,26 @@
                     alert('Estadísticas borradas correctamente');
                 }
             });
+
+            window.toggleLocationData = function(id) {
+                const element = document.getElementById(id);
+                if (element.style.display === 'none') {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
+            };
+            
+            window.toggleDeviceData = function(id) {
+                const element = document.getElementById(id);
+                if (element.style.display === 'none') {
+                    element.style.display = 'block';
+                    element.previousElementSibling.querySelector('.expand-btn i').className = 'fas fa-chevron-up';
+                } else {
+                    element.style.display = 'none';
+                    element.previousElementSibling.querySelector('.expand-btn i').className = 'fas fa-chevron-down';
+                }
+            };
         });
     </script>
 </body>
