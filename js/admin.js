@@ -108,11 +108,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar todas las estadísticas
     function loadAllStats() {
         try {
-            loadLoginAttempts();
-            loadPageVisits();
-            loadHeartInteractions();
+            // Verificar la existencia de contenedores antes de cargar datos
+            if (document.getElementById('loginAttemptsContainer')) {
+                loadLoginAttempts();
+            }
             
-            document.getElementById('lastUpdated').textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
+            if (document.getElementById('pageVisitsContainer')) {
+                loadPageVisits();
+            }
+            
+            if (document.getElementById('heartInteractionsContainer')) {
+                loadHeartInteractions();
+            }
+            
+            const lastUpdatedElement = document.getElementById('lastUpdated');
+            if (lastUpdatedElement) {
+                lastUpdatedElement.textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
+            }
         } catch (error) {
             console.error("Error al cargar estadísticas:", error);
             showNotification("❌ Error al cargar estadísticas: " + error.message, "error");
@@ -164,29 +176,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let loginAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]');
         
-        // Aplicar filtro
-        if (currentFilter === "success") {
-            loginAttempts = loginAttempts.filter(attempt => attempt.success);
-        } else if (currentFilter === "failure") {
-            loginAttempts = loginAttempts.filter(attempt => !attempt.success);
-        } else if (currentFilter === "likely") {
-            loginAttempts = loginAttempts.filter(attempt => isProbablyTargetPerson(attempt));
-        }
-        
-        // Aplicar búsqueda
-        if (searchTerm) {
-            loginAttempts = loginAttempts.filter(attempt => 
-                attempt.nickname1.toLowerCase().includes(searchTerm) || 
-                attempt.nickname2.toLowerCase().includes(searchTerm) ||
-                (attempt.location && attempt.location.city && 
-                 attempt.location.city.toLowerCase().includes(searchTerm))
-            );
-        }
-        
-        // Actualizar contadores
-        document.getElementById('loginAttemptsCount').textContent = loginAttempts.length;
-        document.getElementById('successfulLoginsCount').textContent = loginAttempts.filter(a => a.success).length;
-        document.getElementById('likelyPersonCount').textContent = loginAttempts.filter(a => isProbablyTargetPerson(a)).length;
+        // Actualizar contadores si los elementos existen
+        updateCounter('loginAttemptsCount', loginAttempts.length);
+        updateCounter('successfulLoginsCount', loginAttempts.filter(a => a.success).length);
+        updateCounter('likelyPersonCount', loginAttempts.filter(a => isProbablyTargetPerson(a)).length);
         
         if (loginAttempts.length === 0) {
             container.innerHTML = `
@@ -305,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
             totalVisits += visits.length;
         });
         
-        document.getElementById('pageVisitsCount').textContent = totalVisits;
+        updateCounter('pageVisitsCount', totalVisits);
         
         if (totalVisits === 0) {
             container.innerHTML = `
@@ -410,16 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let heartInteractions = JSON.parse(localStorage.getItem('heartInteractions') || '[]');
         
-        // Aplicar filtro si es necesario
-        if (searchTerm) {
-            heartInteractions = heartInteractions.filter(interaction => 
-                interaction.action.toLowerCase().includes(searchTerm) || 
-                (interaction.sessionId && interaction.sessionId.toLowerCase().includes(searchTerm)) ||
-                (interaction.fingerprint && interaction.fingerprint.toLowerCase().includes(searchTerm))
-            );
-        }
-        
-        document.getElementById('heartInteractionsCount').textContent = heartInteractions.length;
+        updateCounter('heartInteractionsCount', heartInteractions.length);
         
         if (heartInteractions.length === 0) {
             container.innerHTML = `
@@ -883,6 +867,14 @@ document.addEventListener('DOMContentLoaded', function() {
         loadAllStats();
     }
     
+    // Función auxiliar para actualizar contadores de manera segura
+    function updateCounter(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+        }
+    }
+    
     // Función de seguridad para escapar HTML
     function escapeHTML(str) {
         if (typeof str !== 'string') return '';
@@ -892,6 +884,38 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+    }
+    
+    // Manejar evento del enlace de actualización manual
+    const manualRefreshLink = document.getElementById('manualRefresh');
+    if (manualRefreshLink) {
+        manualRefreshLink.addEventListener('click', function() {
+            loadAllStats();
+            showNotification("🔄 Estadísticas actualizadas correctamente.", "info");
+        });
+    }
+    
+    // Manejar eventos para los filtros rápidos de píldoras
+    const filterPills = document.querySelectorAll('.filter-pill');
+    if (filterPills.length > 0) {
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                // Actualizar la clase activa
+                filterPills.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Establecer el valor en el select de filtro
+                const filterValue = this.getAttribute('data-filter');
+                const filterSelect = document.getElementById('filterSelect');
+                if (filterSelect) {
+                    filterSelect.value = filterValue;
+                    
+                    // Disparar un evento change para que se aplique el filtro
+                    const event = new Event('change');
+                    filterSelect.dispatchEvent(event);
+                }
+            });
+        });
     }
     
     // Exponer funciones necesarias globalmente
