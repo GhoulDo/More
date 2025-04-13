@@ -4,415 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Montserrat:wght@300;400;500&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .admin-container {
-            background-color: #1c1c1c;
-            border-radius: 10px;
-            padding: 30px;
-            margin: 30px auto;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            border: 1px solid #333;
-        }
-        
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-        }
-        
-        .admin-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .admin-title i {
-            color: #ff80bf;
-        }
-        
-        .stats-section {
-            margin-bottom: 40px;
-        }
-        
-        .stats-section h3 {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .stats-section i {
-            color: #ff80bf;
-        }
-        
-        .stats-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .stats-table th, .stats-table td {
-            padding: 10px 15px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
-        
-        .stats-table th {
-            background-color: #222;
-            color: #ff80bf;
-        }
-        
-        .stats-table tr:hover {
-            background-color: #222;
-        }
-        
-        .success {
-            color: #4CAF50;
-        }
-        
-        .failure {
-            color: #ff80bf;
-        }
-        
-        .counter-box {
-            background-color: #222;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: inline-block;
-            min-width: 200px;
-            text-align: center;
-        }
-        
-        .counter-value {
-            font-size: 2rem;
-            margin: 10px 0;
-            color: #ff80bf;
-        }
-        
-        .counter-label {
-            color: #aaa;
-        }
-        
-        .counter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .admin-actions {
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .admin-btn {
-            padding: 10px 20px;
-            background: #333;
-            color: #ddd;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .admin-btn i {
-            font-size: 14px;
-        }
-        
-        .admin-btn:hover {
-            background: #444;
-            transform: translateY(-2px);
-        }
-        
-        .admin-btn.danger {
-            background: #3a1a21;
-        }
-        
-        .admin-btn.danger:hover {
-            background: #4e2029;
-        }
-        
-        .login-attempt-success {
-            background-color: rgba(76, 175, 80, 0.1);
-        }
-        
-        .login-attempt-failure {
-            background-color: rgba(255, 128, 191, 0.1);
-        }
-        
-        .time-ago {
-            font-size: 0.8em;
-            color: #777;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 30px;
-            color: #777;
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-        
-        .password-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        
-        .password-box {
-            background-color: #222;
-            padding: 30px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid #333;
-        }
-        
-        .password-box h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .password-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 6px;
-        }
-        
-        .password-input:focus {
-            outline: none;
-            border-color: #ff80bf;
-            box-shadow: 0 0 10px rgba(255, 128, 191, 0.3);
-        }
-
-        .location-data {
-            background-color: rgba(255, 128, 191, 0.1);
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
-        
-        .location-btn {
-            background: none;
-            border: none;
-            color: #ff80bf;
-            font-size: 0.9em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 2px 5px;
-            border-radius: 3px;
-            transition: all 0.3s;
-        }
-        
-        .location-btn:hover {
-            background: rgba(255, 128, 191, 0.1);
-        }
-        
-        .maps-link {
-            color: #9d50bb;
-            margin-left: 5px;
-            text-decoration: none;
-        }
-        
-        .maps-link:hover {
-            text-decoration: underline;
-        }
-        
-        .device-info {
-            margin-top: 5px;
-            color: #777;
-            font-size: 0.85em;
-        }
-        
-        .device-tag {
-            display: inline-block;
-            padding: 2px 5px;
-            border-radius: 3px;
-            background-color: #222;
-            margin-right: 5px;
-            margin-bottom: 5px;
-            font-size: 0.8em;
-        }
-        
-        .ip-info {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .expand-btn {
-            background: none;
-            border: none;
-            color: #777;
-            cursor: pointer;
-            padding: 5px;
-            transition: all 0.3s;
-        }
-        
-        .expand-btn:hover {
-            color: #ff80bf;
-        }
-        
-        .highlight {
-            background-color: rgba(255, 255, 0, 0.15);
-        }
-        
-        /* Nuevos estilos para mejorar la visualización de ubicación */
-        .location-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85em;
-            padding: 3px 6px;
-            border-radius: 4px;
-        }
-        
-        .location-pending {
-            background-color: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
-        
-        .location-success {
-            background-color: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-        }
-        
-        .location-error {
-            background-color: rgba(244, 67, 54, 0.2);
-            color: #f44336;
-        }
-        
-        .location-detail {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        
-        .detail-item {
-            background-color: rgba(255, 128, 191, 0.1);
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .detail-item i {
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-        
-        .fingerprint-info {
-            border-top: 1px dashed #333;
-            margin-top: 10px;
-            padding-top: 8px;
-            font-size: 0.85em;
-            color: #888;
-        }
-        
-        .fingerprint-tag {
-            font-family: monospace;
-            background-color: #222;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-        
-        .attempt-detail-panel {
-            background-color: #1a1a1a;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            border: 1px solid #333;
-            display: none;
-        }
-        
-        .detail-tabs {
-            display: flex;
-            border-bottom: 1px solid #333;
-            margin-bottom: 15px;
-        }
-        
-        .detail-tab {
-            padding: 8px 15px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .detail-tab:hover {
-            color: #ff80bf;
-        }
-        
-        .detail-tab.active {
-            color: #ff80bf;
-            border-bottom-color: #ff80bf;
-        }
-        
-        .detail-content {
-            display: none;
-        }
-        
-        .detail-content.active {
-            display: block;
-        }
-        
-        .map-container {
-            width: 100%;
-            height: 300px;
-            background-color: #222;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #888;
-        }
-        
-        @media (max-width: 768px) {
-            .stats-table th, .stats-table td {
-                padding: 8px 10px;
-            }
-            
-            .detail-tab {
-                padding: 8px 10px;
-                font-size: 0.9em;
-            }
-        }
-    </style>
 </head>
-<body>
+<body class="fade-in-page">
+    <!-- Panel para ingresar contraseña -->
     <div class="password-container" id="passwordContainer">
         <div class="password-box">
             <h2>Acceso Administrador</h2>
@@ -422,6 +20,9 @@
             </button>
         </div>
     </div>
+
+    <!-- Área de notificaciones -->
+    <div id="notificationArea"></div>
 
     <header>
         <div class="header-content">
@@ -441,28 +42,70 @@
                     <i class="fas fa-chart-line fa-2x"></i>
                     <h2>Estadísticas de Visitantes</h2>
                 </div>
-                <div>
-                    <span id="lastUpdated"></span>
+                <div class="data-refresh">
+                    <i class="fas fa-sync"></i>
+                    <span id="lastUpdated">Actualizado: --:--:--</span>
+                    <span id="manualRefresh">(Actualizar ahora)</span>
                 </div>
             </div>
             
-            <div class="counter-grid">
-                <div class="counter-box">
-                    <div class="counter-label">Intentos de Login</div>
-                    <div class="counter-value" id="loginAttemptsCount">0</div>
+            <!-- Dashboard mejorado -->
+            <div class="dashboard-summary">
+                <div class="summary-card">
+                    <h4><i class="fas fa-sign-in-alt"></i> Intentos de Login</h4>
+                    <div class="summary-value" id="loginAttemptsCount">0</div>
+                    <div class="summary-label">Total de intentos registrados</div>
                 </div>
-                <div class="counter-box">
-                    <div class="counter-label">Intentos Exitosos</div>
-                    <div class="counter-value" id="successfulLoginsCount">0</div>
+                
+                <div class="summary-card">
+                    <h4><i class="fas fa-check-circle"></i> Intentos Exitosos</h4>
+                    <div class="summary-value" id="successfulLoginsCount">0</div>
+                    <div class="summary-label">Accesos completados</div>
                 </div>
-                <div class="counter-box">
-                    <div class="counter-label">Páginas Visitadas</div>
-                    <div class="counter-value" id="pageVisitsCount">0</div>
+                
+                <div class="summary-card">
+                    <h4><i class="fas fa-user-check"></i> Probable Objetivo</h4>
+                    <div class="summary-value" id="likelyPersonCount">0</div>
+                    <div class="summary-label">Posiblemente sea la persona buscada</div>
                 </div>
-                <div class="counter-box">
-                    <div class="counter-label">Interacciones Corazón</div>
-                    <div class="counter-value" id="heartInteractionsCount">0</div>
+                
+                <div class="summary-card">
+                    <h4><i class="fas fa-file-alt"></i> Total de Visitas</h4>
+                    <div class="summary-value" id="pageVisitsCount">0</div>
+                    <div class="summary-label">Páginas vistas</div>
                 </div>
+            </div>
+            
+            <!-- Controles de búsqueda y filtrado -->
+            <div class="admin-controls">
+                <div class="admin-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por apodo, ciudad, IP...">
+                </div>
+                <div class="admin-filter">
+                    <select id="filterSelect">
+                        <option value="all">Todos los intentos</option>
+                        <option value="success">Solo exitosos</option>
+                        <option value="failure">Solo fallidos</option>
+                        <option value="likely">Probablemente ella</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Filtros rápidos -->
+            <div class="quick-filter-pills">
+                <button class="filter-pill active" data-filter="all">
+                    <i class="fas fa-globe"></i> Todos
+                </button>
+                <button class="filter-pill" data-filter="success">
+                    <i class="fas fa-check-circle"></i> Exitosos
+                </button>
+                <button class="filter-pill" data-filter="failure">
+                    <i class="fas fa-times-circle"></i> Fallidos
+                </button>
+                <button class="filter-pill" data-filter="likely">
+                    <i class="fas fa-user-check"></i> Probablemente Ella
+                </button>
             </div>
             
             <div class="stats-section">
@@ -513,470 +156,6 @@
         <p>Panel de Administración - Solo uso autorizado</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const passwordContainer = document.getElementById('passwordContainer');
-            const adminPassword = document.getElementById('adminPassword');
-            const submitPassword = document.getElementById('submitPassword');
-            
-            const ADMIN_PASSWORD = "enciso2025"; // Cambia esto a tu contraseña deseada
-            
-            submitPassword.addEventListener('click', function() {
-                if (adminPassword.value === ADMIN_PASSWORD) {
-                    passwordContainer.style.display = 'none';
-                    loadAllStats();
-                } else {
-                    adminPassword.style.borderColor = '#ff80bf';
-                    adminPassword.value = '';
-                    adminPassword.placeholder = 'Contraseña incorrecta';
-                    setTimeout(() => {
-                        adminPassword.placeholder = 'Ingresa la contraseña';
-                    }, 2000);
-                }
-            });
-            
-            adminPassword.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitPassword.click();
-                }
-            });
-            
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-            }
-            
-            function timeAgo(dateString) {
-                const date = new Date(dateString);
-                const now = new Date();
-                const seconds = Math.floor((now - date) / 1000);
-                
-                let interval = seconds / 31536000;
-                if (interval > 1) return Math.floor(interval) + " años atrás";
-                
-                interval = seconds / 2592000;
-                if (interval > 1) return Math.floor(interval) + " meses atrás";
-                
-                interval = seconds / 86400;
-                if (interval > 1) return Math.floor(interval) + " días atrás";
-                
-                interval = seconds / 3600;
-                if (interval > 1) return Math.floor(interval) + " horas atrás";
-                
-                interval = seconds / 60;
-                if (interval > 1) return Math.floor(interval) + " minutos atrás";
-                
-                return "justo ahora";
-            }
-            
-            function loadLoginAttempts() {
-                const container = document.getElementById('loginAttemptsContainer');
-                const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]');
-                
-                document.getElementById('loginAttemptsCount').textContent = loginAttempts.length;
-                document.getElementById('successfulLoginsCount').textContent = loginAttempts.filter(a => a.success).length;
-                
-                if (loginAttempts.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-ghost"></i>
-                            <p>No se han registrado intentos de inicio de sesión.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = `
-                    <table class="stats-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Primer Apodo</th>
-                                <th>Segundo Apodo</th>
-                                <th>Resultado</th>
-                                <th>Ubicación</th>
-                                <th>Dispositivo</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                loginAttempts.slice().reverse().forEach((attempt, index) => {
-                    const isProbablyHer = isProbablyTargetPerson(attempt);
-                    const rowClass = isProbablyHer ? 
-                        `${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'} highlight` : 
-                        `${attempt.success ? 'login-attempt-success' : 'login-attempt-failure'}`;
-                    
-                    const attemptId = `attempt-${index}`;
-                    
-                    html += `
-                        <tr class="${rowClass}" data-attempt="${index}" id="${attemptId}-row">
-                            <td>${formatDate(attempt.timestamp)}</td>
-                            <td>${attempt.nickname1}</td>
-                            <td>${attempt.nickname2}</td>
-                            <td class="${attempt.success ? 'success' : 'failure'}">
-                                <i class="fas ${attempt.success ? 'fa-check-circle' : 'fa-times-circle'}"></i>
-                                ${attempt.success ? 'Exitoso' : 'Fallido'}
-                            </td>
-                            <td>
-                    `;
-                    
-                    html += formatLocationCell(attempt, `loc-${index}`);
-                    
-                    html += `</td><td>`;
-                    
-                    html += formatDeviceCell(attempt, `dev-${index}`);
-                    
-                    html += `</td><td>
-                                <button class="admin-btn" onclick="showDetailedView('${attemptId}')">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </td></tr>`;
-                    
-                    html += `
-                        <tr style="display: none;" id="${attemptId}-details">
-                            <td colspan="7">
-                                <div class="attempt-detail-panel" id="${attemptId}-panel">
-                                    <div class="detail-tabs">
-                                        <div class="detail-tab active" onclick="switchDetailTab('${attemptId}', 'overview')">Resumen</div>
-                                        <div class="detail-tab" onclick="switchDetailTab('${attemptId}', 'location')">Ubicación</div>
-                                        <div class="detail-tab" onclick="switchDetailTab('${attemptId}', 'device')">Dispositivo</div>
-                                        <div class="detail-tab" onclick="switchDetailTab('${attemptId}', 'raw')">Datos Brutos</div>
-                                    </div>
-                                    
-                                    <div id="${attemptId}-overview" class="detail-content active">
-                                        <h4>Resumen del Intento</h4>
-                                        <p>Realizado el ${formatDate(attempt.timestamp)}</p>
-                                        <div class="location-detail">
-                                            ${getQuickLocationSummary(attempt)}
-                                        </div>
-                                        <div class="fingerprint-info">
-                                            <p>Huella digital: <span class="fingerprint-tag">${attempt.fingerprint || 'No disponible'}</span></p>
-                                            <p>Probabilidad de ser la persona buscada: ${isProbablyHer ? '<span style="color: #ff80bf;">Alta</span>' : '<span style="color: #aaa;">Baja</span>'}</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div id="${attemptId}-location" class="detail-content">
-                                        <h4>Información de Ubicación</h4>
-                                        ${getDetailedLocationInfo(attempt)}
-                                    </div>
-                                    
-                                    <div id="${attemptId}-device" class="detail-content">
-                                        <h4>Información del Dispositivo</h4>
-                                        ${getDetailedDeviceInfo(attempt)}
-                                    </div>
-                                    
-                                    <div id="${attemptId}-raw" class="detail-content">
-                                        <h4>Datos JSON</h4>
-                                        <pre style="overflow-x: auto; background: #111; padding: 10px; border-radius: 5px;">${JSON.stringify(attempt, null, 2)}</pre>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                });
-                
-                html += `
-                        </tbody>
-                    </table>
-                `;
-                
-                container.innerHTML = html;
-            }
-            
-            function isProbablyTargetPerson(attempt) {
-                const nicknameMatch = (attempt.nickname1.toLowerCase().includes("mor") || 
-                                      attempt.nickname2.toLowerCase().includes("amo"));
-                
-                let deviceMatch = false;
-                if (attempt.device) {
-                    const deviceType = detectDeviceType(attempt.device.userAgent);
-                    deviceMatch = deviceType === "Android";
-                }
-                
-                const recentAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]')
-                    .filter(a => {
-                        if (attempt.fingerprint && a.fingerprint === attempt.fingerprint) return true;
-                        if (attempt.location && a.location && 
-                            attempt.location.ip && a.location.ip === attempt.location.ip) return true;
-                        return false;
-                    });
-                
-                const behaviorMatch = recentAttempts.length > 1;
-                
-                return nicknameMatch || (deviceMatch && behaviorMatch);
-            }
-            
-            function formatLocationCell(attempt, id) {
-                let html = '';
-                
-                if (!attempt.location || attempt.location === 'pendiente') {
-                    html += `
-                        <span class="location-status location-pending">
-                            <i class="fas fa-spinner fa-spin"></i> Pendiente
-                        </span>
-                    `;
-                } else if (attempt.location.error) {
-                    html += `
-                        <span class="location-status location-error">
-                            <i class="fas fa-exclamation-triangle"></i> Error
-                        </span>
-                    `;
-                } else {
-                    if (attempt.location.city) {
-                        html += `
-                            <button class="location-btn" onclick="toggleLocationData('${id}')">
-                                <i class="fas fa-map-marker-alt"></i> 
-                                ${attempt.location.city}, ${attempt.location.country || ''}
-                            </button>
-                            <div id="${id}" class="location-data" style="display: none;">
-                                ${attempt.location.ip ? 
-                                  `<div class="ip-info"><span><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</span></div>` : ''}
-                                <div>
-                                    <i class="fas fa-map-pin"></i> 
-                                    ${attempt.location.city}, ${attempt.location.region || ''}, ${attempt.location.country || ''}
-                                    ${attempt.location.latitude ? 
-                                        `<a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
-                                        target="_blank" class="maps-link">
-                                        <i class="fas fa-external-link-alt"></i> Ver en mapa</a>` 
-                                        : ''}
-                                </div>
-                                ${attempt.location.isp ? 
-                                  `<div><i class="fas fa-building"></i> ISP: ${attempt.location.isp}</div>` : ''}
-                            </div>
-                        `;
-                    } else if (attempt.location.ip) {
-                        html += `
-                            <div class="ip-info">
-                                <i class="fas fa-globe"></i> IP: ${attempt.location.ip}
-                            </div>
-                        `;
-                    } else if (attempt.location.latitude) {
-                        html += `
-                            <button class="location-btn" onclick="toggleLocationData('${id}')">
-                                <i class="fas fa-map-marker-alt"></i> Ubicación GPS
-                            </button>
-                            <div id="${id}" class="location-data" style="display: none;">
-                                <div>
-                                    <i class="fas fa-map-pin"></i> 
-                                    Lat: ${attempt.location.latitude.toFixed(6)}, 
-                                    Lng: ${attempt.location.longitude.toFixed(6)}
-                                    <a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
-                                    target="_blank" class="maps-link">
-                                    <i class="fas fa-external-link-alt"></i> Ver en mapa</a>
-                                </div>
-                                ${attempt.location.accuracy ? 
-                                  `<div><i class="fas fa-crosshairs"></i> Precisión: ±${Math.round(attempt.location.accuracy)}m</div>` : ''}
-                            </div>
-                        `;
-                    } else {
-                        html += `<span>Información limitada</span>`;
-                    }
-                }
-                
-                return html;
-            }
-            
-            function formatDeviceCell(attempt, id) {
-                let html = '';
-                
-                if (attempt.device) {
-                    const deviceType = detectDeviceType(attempt.device.userAgent);
-                    const icon = getDeviceIcon(deviceType);
-                    
-                    html += `
-                        <div>
-                            <i class="${icon}"></i> ${deviceType}
-                            <button class="expand-btn" onclick="toggleDeviceData('${id}')">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div id="${id}" class="device-info" style="display: none;">
-                            ${attempt.device.platform ? `<div class="device-tag">${attempt.device.platform}</div>` : ''}
-                            ${attempt.device.screenSize ? `<div class="device-tag">${attempt.device.screenSize}</div>` : ''}
-                            ${attempt.device.timezone ? `<div class="device-tag">${attempt.device.timezone}</div>` : ''}
-                            ${attempt.device.userAgent ? `<div>${truncateUserAgent(attempt.device.userAgent)}</div>` : ''}
-                        </div>
-                    `;
-                } else {
-                    html += `<span>No disponible</span>`;
-                }
-                
-                return html;
-            }
-            
-            function getQuickLocationSummary(attempt) {
-                if (!attempt.location || attempt.location === 'pendiente') {
-                    return `<div class="detail-item"><i class="fas fa-map-marker-alt"></i> Ubicación no disponible</div>`;
-                }
-                
-                let summary = '';
-                
-                if (attempt.location.city) {
-                    summary += `<div class="detail-item"><i class="fas fa-city"></i> ${attempt.location.city}, ${attempt.location.country || ''}</div>`;
-                }
-                
-                if (attempt.location.ip) {
-                    summary += `<div class="detail-item"><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</div>`;
-                }
-                
-                if (attempt.device) {
-                    const deviceType = detectDeviceType(attempt.device.userAgent);
-                    summary += `<div class="detail-item"><i class="${getDeviceIcon(deviceType)}"></i> ${deviceType}</div>`;
-                }
-                
-                return summary || `<div class="detail-item"><i class="fas fa-question-circle"></i> Información limitada</div>`;
-            }
-            
-            function getDetailedLocationInfo(attempt) {
-                if (!attempt.location || attempt.location === 'pendiente') {
-                    return `<p>No hay información de ubicación disponible.</p>`;
-                }
-                
-                if (attempt.location.error) {
-                    return `<p>Error al obtener ubicación: ${attempt.location.error}</p>`;
-                }
-                
-                let html = '<div class="location-detail">';
-                
-                if (attempt.location.ip) {
-                    html += `
-                        <div class="detail-item"><i class="fas fa-globe"></i> IP: ${attempt.location.ip}</div>
-                    `;
-                    
-                    if (attempt.location.city) {
-                        html += `
-                            <div class="detail-item"><i class="fas fa-city"></i> Ciudad: ${attempt.location.city}</div>
-                            <div class="detail-item"><i class="fas fa-map"></i> Región: ${attempt.location.region || 'N/A'}</div>
-                            <div class="detail-item"><i class="fas fa-flag"></i> País: ${attempt.location.country || 'N/A'}</div>
-                        `;
-                    }
-                    
-                    if (attempt.location.isp) {
-                        html += `<div class="detail-item"><i class="fas fa-building"></i> ISP: ${attempt.location.isp}</div>`;
-                    }
-                }
-                
-                if (attempt.location.latitude) {
-                    html += `
-                        <div class="detail-item"><i class="fas fa-map-pin"></i> Coordenadas: ${attempt.location.latitude.toFixed(6)}, ${attempt.location.longitude.toFixed(6)}</div>
-                    `;
-                    
-                    if (attempt.location.accuracy) {
-                        html += `<div class="detail-item"><i class="fas fa-crosshairs"></i> Precisión: ±${Math.round(attempt.location.accuracy)}m</div>`;
-                    }
-                    
-                    html += `
-                        <div class="map-container">
-                            <a href="https://www.google.com/maps?q=${attempt.location.latitude},${attempt.location.longitude}" 
-                               target="_blank" class="btn-link">
-                               <i class="fas fa-map"></i> Ver en Google Maps
-                            </a>
-                        </div>
-                    `;
-                }
-                
-                html += '</div>';
-                
-                return html;
-            }
-            
-            function getDetailedDeviceInfo(attempt) {
-                if (!attempt.device) {
-                    return `<p>No hay información del dispositivo disponible.</p>`;
-                }
-                
-                const deviceType = detectDeviceType(attempt.device.userAgent);
-                
-                let html = `
-                    <div class="device-info">
-                        <h5><i class="${getDeviceIcon(deviceType)}"></i> ${deviceType}</h5>
-                        <div class="location-detail">
-                `;
-                
-                if (attempt.device.platform) {
-                    html += `<div class="detail-item"><i class="fas fa-laptop"></i> Sistema: ${attempt.device.platform}</div>`;
-                }
-                
-                if (attempt.device.screenSize) {
-                    html += `<div class="detail-item"><i class="fas fa-desktop"></i> Pantalla: ${attempt.device.screenSize}</div>`;
-                }
-                
-                if (attempt.device.windowSize) {
-                    html += `<div class="detail-item"><i class="fas fa-window-restore"></i> Ventana: ${attempt.device.windowSize}</div>`;
-                }
-                
-                if (attempt.device.timezone) {
-                    html += `<div class="detail-item"><i class="fas fa-clock"></i> Zona horaria: ${attempt.device.timezone}</div>`;
-                }
-                
-                if (attempt.device.language) {
-                    html += `<div class="detail-item"><i class="fas fa-language"></i> Idioma: ${attempt.device.language}</div>`;
-                }
-                
-                html += `
-                        </div>
-                        <div class="fingerprint-info">
-                            ${attempt.fingerprint ? `<p>Huella digital: <span class="fingerprint-tag">${attempt.fingerprint}</span></p>` : ''}
-                        </div>
-                        <div style="margin-top: 15px;">
-                            <h5>User Agent</h5>
-                            <div style="background-color: #111; padding: 10px; border-radius: 5px; overflow-x: auto; margin-top: 5px; font-family: monospace; font-size: 0.85em;">
-                                ${attempt.device.userAgent || 'No disponible'}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                return html;
-            }
-            
-            function detectDeviceType(userAgent) {
-                if (!userAgent) return "Desconocido";
-                
-                const ua = userAgent.toLowerCase();
-                if (ua.includes("iphone") || ua.includes("ipod")) return "iPhone";
-                if (ua.includes("ipad")) return "iPad";
-                if (ua.includes("android") && ua.includes("mobile")) return "Android Phone";
-                if (ua.includes("android") && !ua.includes("mobile")) return "Android Tablet";
-                if (ua.includes("windows phone")) return "Windows Phone";
-                if (ua.includes("macintosh") || ua.includes("mac os")) return "Mac";
-                if (ua.includes("windows")) return "Windows";
-                if (ua.includes("linux")) return "Linux";
-                return "Desconocido";
-            }
-            
-            window.showDetailedView = function(attemptId) {
-                const detailsRow = document.getElementById(`${attemptId}-details`);
-                const detailsPanel = document.getElementById(`${attemptId}-panel`);
-                
-                if (detailsRow.style.display === 'none') {
-                    document.querySelectorAll('[id$="-details"]').forEach(row => {
-                        if (row.id !== `${attemptId}-details`) row.style.display = 'none';
-                    });
-                    
-                    detailsRow.style.display = '';
-                    detailsPanel.style.display = 'block';
-                } else {
-                    detailsRow.style.display = 'none';
-                }
-            };
-            
-            window.switchDetailTab = function(attemptId, tab) {
-                document.querySelectorAll(`#${attemptId}-panel .detail-tab`).forEach(tab => {
-                    tab.classList.remove('active');
-                });
-                
-                document.querySelectorAll(`#${attemptId}-panel .detail-content`).forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                document.querySelector(`.detail-tab[onclick="switchDetailTab('${attemptId}', '${tab}')"]`).classList.add('active');
-                
-                document.getElementById(`${attemptId}-${tab}`).classList.add('active');
-            };
-        });
-    </script>
+    <script src="js/admin.js"></script>
 </body>
 </html>
